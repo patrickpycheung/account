@@ -36,8 +36,9 @@
     	</root>
 	</springProfile>
 
-	<springProfile name="">
-    	<root level="ERROR">
+	<springProfile name="!dev">
+    	<root level="DEBUG">
+        	<appender-ref ref="STDOUT"/>
         	<appender-ref ref="ROLLING_FILE"/>
     	</root>
 	</springProfile>
