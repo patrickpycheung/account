@@ -28,4 +28,4 @@ WORKDIR /opt/app
 COPY --from=build /opt/source/account/target/account-0.0.1-SNAPSHOT.jar app.jar
 
 # Run application in container
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java","-Dspring.profiles.active=dev","-jar","app.jar"]
