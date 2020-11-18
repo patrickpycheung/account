@@ -27,10 +27,12 @@ public class Transaction {
 	private String currency;
 
 	@Column(name = "debit_amt", columnDefinition = "Decimal(20,2) default '0.0'")
+	@NotNull(message = "Debit amount cannot be null")
 	@DecimalMin(value = "0.0", message = "Debit amount cannot be negative")
 	private float debitAmt;
 
 	@Column(name = "credit_amt", columnDefinition = "Decimal(20,2) default '0.0'")
+	@NotNull(message = "Credit amount cannot be null")
 	@DecimalMin(value = "0.0", message = "Credit amount cannot be negative")
 	private float creditAmt;
 
