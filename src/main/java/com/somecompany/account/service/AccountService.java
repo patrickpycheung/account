@@ -9,14 +9,20 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.somecompany.account.dao.AccountRepository;
+import com.somecompany.account.dao.TransactionRepository;
 import com.somecompany.account.model.Account;
 import com.somecompany.account.model.Customer;
+import com.somecompany.account.model.Transaction;
+import com.somecompany.account.model.TransactionPK;
 
 @Service
 public class AccountService {
 
 	@Autowired
 	private AccountRepository accountRepository;
+
+	@Autowired
+	private TransactionRepository transactionRepository;
 
 	public List<Account> getAllAccounts(Customer customer) {
 
@@ -30,5 +36,22 @@ public class AccountService {
 		List<Account> acctList = accountRepository.findAll(example, Sort.by(Sort.Direction.ASC, "accountNum"));
 
 		return acctList;
+	}
+
+	public List<Transaction> getAllTransactions(Account account) {
+
+		TransactionPK inputTransactionPK = new TransactionPK();
+		inputTransactionPK.setAccountNum(account.getAccountNum());
+
+		Transaction inputTransaction = new Transaction();
+		inputTransaction.setTransactionPK(inputTransactionPK);
+
+		ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnorePaths("debitAmt", "creditAmt");
+
+		Example<Transaction> example = Example.of(inputTransaction, matcher);
+
+		List<Transaction> transactionList = transactionRepository.findAll(example);
+
+		return transactionList;
 	}
 }

@@ -13,6 +13,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.somecompany.account.model.Account;
 import com.somecompany.account.model.Customer;
+import com.somecompany.account.model.Transaction;
+import com.somecompany.account.model.TransactionPK;
 import com.somecompany.account.service.AccountService;
 
 @SpringBootTest
@@ -54,6 +56,43 @@ public class AccountServiceTest {
 
 			// Assertion
 			assertEquals(expectedAccount, accList.get(i));
+		}
+	}
+
+	@ParameterizedTest
+	@CsvFileSource(resources = "/TransactionTestData.csv", numLinesToSkip = 1)
+	public void shouldBeAbleToGetTransactionsByAccountNum(String numOfTransactionsStr, String inputAccNum,
+			String expectedTransactionLists) {
+		Account account = new Account();
+		account.setAccountNum(1111111111);
+
+		// The actual transaction values
+		List<Transaction> transactionList = accountService.getAllTransactions(account);
+
+		// The expected transaction values
+		String[] transactions = expectedTransactionLists.split("\\|");
+
+		// The number of transactions for the account
+		int numOfTransactions = Integer.valueOf(numOfTransactionsStr);
+
+		for (int i = 0; i < numOfTransactions; i++) {
+			String[] transaction = transactions[i].split("~");
+
+			TransactionPK expectedTransactionPK = new TransactionPK();
+			expectedTransactionPK.setAccountNum(Long.valueOf(transaction[0]));
+			expectedTransactionPK.setValueDate(Timestamp.valueOf(transaction[2]));
+
+			Transaction expectedTransaction = new Transaction();
+			expectedTransaction.setTransactionPK(expectedTransactionPK);
+			expectedTransaction.setAccountName(transaction[1]);
+			expectedTransaction.setCurrency(transaction[3]);
+			expectedTransaction.setDebitAmt(Float.valueOf(transaction[4]));
+			expectedTransaction.setCreditAmt(Float.valueOf(transaction[5]));
+			expectedTransaction.setDebitCredit(transaction[6]);
+			expectedTransaction.setTransactionNarrative(transaction[7]);
+
+			// Assertion
+			assertEquals(expectedTransaction, transactionList.get(i));
 		}
 	}
 }
