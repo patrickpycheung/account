@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -16,15 +18,17 @@ import lombok.Data;
 public class Account {
 
 	@Column(name = "cust_id")
-	@Id
 	@NotNull(message = "Customer ID cannot be null")
-	@Size(min = 1, max = 10, message = "Customer ID must have length between 1 and 10")
-	private int custId;
+	@Min(value = 1L, message = "Customer ID must not be less than 1")
+	@Max(value = 9999999999L, message = "Customer ID must not be larger than 9999999999")
+	private long custId;
 
 	@Column(name = "account_num")
+	@Id
 	@NotNull(message = "Account number cannot be null")
-	@Size(min = 1, max = 10, message = "Account number must have length between 1 and 10")
-	private int accountNum;
+	@Min(value = 1L, message = "Account number  must not be less than 1")
+	@Max(value = 9999999999L, message = "Account number must not be larger than 9999999999")
+	private long accountNum;
 
 	@Column(name = "account_name")
 	@NotNull(message = "Account name cannot be null")
@@ -33,7 +37,7 @@ public class Account {
 
 	@Column(name = "account_type")
 	@NotNull(message = "Account type cannot be null")
-	@Size(min = 1, max = 30, message = "Account type must have length between 1 and 10")
+	@Size(min = 1, max = 7, message = "Account type must have length between 1 and 7")
 	private String accountType;
 
 	@Column(name = "balance_date")
