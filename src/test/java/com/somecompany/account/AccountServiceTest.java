@@ -1,14 +1,21 @@
 package com.somecompany.account;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Timestamp;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.somecompany.account.model.Account;
@@ -17,12 +24,18 @@ import com.somecompany.account.model.Transaction;
 import com.somecompany.account.model.TransactionPK;
 import com.somecompany.account.service.AccountService;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("dev")
 public class AccountServiceTest {
 
 	@Autowired
 	private AccountService accountService;
+
+	@LocalServerPort
+	private int port;
+
+	@Autowired
+	private TestRestTemplate testRestTemplate;
 
 	@ParameterizedTest
 	@CsvFileSource(resources = "/AccountTestData.csv", numLinesToSkip = 1)
@@ -94,5 +107,95 @@ public class AccountServiceTest {
 			// Assertion
 			assertEquals(expectedTransaction, transactionList.get(i));
 		}
+	}
+
+	@ParameterizedTest
+	@CsvFileSource(resources = "/AccountAPITestData.csv", numLinesToSkip = 1)
+	public void shouldBeAbleToGetAccountsByCustIdThroughAPICall(String inputCustId, String expectedAccountListStr) {
+		// The actual list of accounts
+		Object object = testRestTemplate.getForObject("http://localhost:" + port + "/api/account?custId=" + inputCustId,
+				Object.class);
+
+		// Assertion
+		assertEquals(expectedAccountListStr, object.toString());
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsMissingWhenGetAccountsByCustIdThroughAPICall() {
+		Object object = testRestTemplate.getForObject("http://localhost:" + port + "/api/account", Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Required String parameter 'custId' is not present"));
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsIncomplete01WhenGetAccountsByCustIdThroughAPICall() {
+		Object object = testRestTemplate.getForObject("http://localhost:" + port + "/api/account?", Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Required String parameter 'custId' is not present"));
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsIncomplete02WhenGetAccountsByCustIdThroughAPICall() {
+		Object object = testRestTemplate.getForObject("http://localhost:" + port + "/api/account?custId", Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Customer ID cannot be null nor empty"));
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsEmptyWhenGetAccountsByCustIdThroughAPICall() {
+		Object object = testRestTemplate.getForObject("http://localhost:" + port + "/api/account?custId=",
+				Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Customer ID cannot be null nor empty"));
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsNotNumericWhenGetAccountsByCustIdThroughAPICall() {
+
+		String nonNumericCharStr = "~`!@#$%^&*()-_+={[}]|\\:;\"'<,>.?/abcdefghijklmnopqrstuvwxyz";
+
+		Stream.of(nonNumericCharStr.split("")).forEach(nonNumericChar -> {
+			Object object = testRestTemplate
+					.getForObject("http://localhost:" + port + "/api/account?custId=" + nonNumericChar, Object.class);
+
+			// Assertion
+			assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+			assertThat(
+					((LinkedHashMap<String, String>) object).get("message").contains("Customer ID must be a number"));
+		});
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsLessThan1WhenGetAccountsByCustIdThroughAPICall() {
+		Object object = testRestTemplate.getForObject("http://localhost:" + port + "/api/account?custId=0",
+				Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Customer ID must not be less than 1"));
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsMoreThan9999999999WhenGetAccountsByCustIdThroughAPICall() {
+		Object object = testRestTemplate.getForObject("http://localhost:" + port + "/api/account?custId=10000000000",
+				Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Customer ID must not be larger than 9999999999"));
 	}
 }
