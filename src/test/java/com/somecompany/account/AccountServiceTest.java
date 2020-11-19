@@ -228,4 +228,132 @@ public class AccountServiceTest {
 		assertThat(((LinkedHashMap<String, String>) object).get("message")
 				.contains("Customer ID must not be larger than 9999999999"));
 	}
+
+	@ParameterizedTest
+	@CsvFileSource(resources = "/TransactionAPITestData.csv", numLinesToSkip = 1)
+	public void shouldBeAbleToGetTransactionsByAccountNumThroughAPICall(String numOfTransactionsStr,
+			String inputAccountNum, String expectedTransactionListStr) {
+
+		// The actual list of transactions
+		ArrayList<LinkedHashMap<String, String>> actualTransactionList = (ArrayList<LinkedHashMap<String, String>>) testRestTemplate
+				.getForObject("http://localhost:" + port + "/api/account/transaction?accountNum=" + inputAccountNum,
+						Object.class);
+
+		// The expected list of transactions
+		String[] transactions = expectedTransactionListStr.split("\\|");
+
+		// The number of transactions for the account
+		int numOftransactions = Integer.valueOf(numOfTransactionsStr);
+
+		for (int i = 0; i < numOftransactions; i++) {
+
+			String[] fields = transactions[i].split("~");
+
+			Map<String, String> expectedTransactionMap = new HashMap<>();
+
+			Stream.of(fields).forEach(field -> {
+				String[] keyAndVal = field.split("=");
+				expectedTransactionMap.put(keyAndVal[0], keyAndVal[1]);
+			});
+
+			// Assertion
+			Object object = actualTransactionList.get(i).get("transactionPK");
+
+			assertEquals(expectedTransactionMap.get("accountNum"),
+					String.valueOf(((LinkedHashMap<String, String>) object).get("accountNum")));
+			assertEquals(expectedTransactionMap.get("accountName"), actualTransactionList.get(i).get("accountName"));
+			assertEquals(expectedTransactionMap.get("valueDate"),
+					((LinkedHashMap<String, String>) object).get("valueDate"));
+			assertEquals(expectedTransactionMap.get("currency"), actualTransactionList.get(i).get("currency"));
+			assertEquals(expectedTransactionMap.get("debitAmt"),
+					String.valueOf(actualTransactionList.get(i).get("debitAmt")));
+			assertEquals(expectedTransactionMap.get("creditAmt"),
+					String.valueOf(actualTransactionList.get(i).get("creditAmt")));
+			assertEquals(expectedTransactionMap.get("debitCredit"), actualTransactionList.get(i).get("debitCredit"));
+			assertEquals(expectedTransactionMap.get("transactionNarrative"),
+					actualTransactionList.get(i).get("transactionNarrative"));
+		}
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsMissingWhenGetTransactionsByAccountNumThroughAPICall() {
+		Object object = testRestTemplate.getForObject("http://localhost:" + port + "/api/account/transaction",
+				Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Required String parameter 'accountNum' is not present"));
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsIncomplete01WhenGetTransactionsByAccountNumThroughAPICall() {
+		Object object = testRestTemplate.getForObject("http://localhost:" + port + "/api/account/transaction?",
+				Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Required String parameter 'accountNum' is not present"));
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsIncomplete02WhenGetTransactionsByAccountNumThroughAPICall() {
+		Object object = testRestTemplate
+				.getForObject("http://localhost:" + port + "/api/account/transaction?accountNum", Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Account number cannot be null nor empty"));
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsEmptyWhenGetTransactionsByAccountNumThroughAPICall() {
+		Object object = testRestTemplate
+				.getForObject("http://localhost:" + port + "/api/account/transaction?accountNum=", Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Account number cannot be null nor empty"));
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsNotNumericWhenGetTransactionsByAccountNumThroughAPICall() {
+
+		String nonNumericCharStr = "~`!@#$%^&*()-_+={[}]|\\:;\"'<,>.?/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+		Stream.of(nonNumericCharStr.split("")).forEach(nonNumericChar -> {
+			Object object = testRestTemplate.getForObject(
+					"http://localhost:" + port + "/api/account/transaction?accountNum=" + nonNumericChar, Object.class);
+
+			// Assertion
+			assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+			assertThat(((LinkedHashMap<String, String>) object).get("message")
+					.contains("Account number must be a number"));
+		});
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsLessThan1WhenGetTransactionsByAccountNumThroughAPICall() {
+		Object object = testRestTemplate
+				.getForObject("http://localhost:" + port + "/api/account/transaction?accountNum=0", Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Account number must not be less than 1"));
+	}
+
+	@Test
+	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsMoreThan9999999999WhenGetTransactionsByAccountNumThroughAPICall() {
+		Object object = testRestTemplate.getForObject(
+				"http://localhost:" + port + "/api/account/transaction?accountNum=10000000000", Object.class);
+
+		// Assertion
+		assertEquals("BAD_REQUEST", ((LinkedHashMap<String, String>) object).get("status"));
+		assertThat(((LinkedHashMap<String, String>) object).get("message")
+				.contains("Account number must not be larger than 9999999999"));
+	}
 }

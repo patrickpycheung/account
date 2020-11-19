@@ -1,0 +1,2 @@
+﻿numOfTransactionsStr,inputAccountNum,expectedTransactionListStr
+2,1111111111,accountNum=1111111111~accountName=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA~valueDate=2012-11-01T11:01:01.000+00:00~currency=SGD~debitAmt=0.0~creditAmt=99999.99~debitCredit=Credit~transactionNarrative=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA|accountNum=1111111111~accountName=CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC~valueDate=2012-11-03T11:03:03.000+00:00~currency=USD~debitAmt=99999.99~creditAmt=0.0~debitCredit=Debit~transactionNarrative=CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC

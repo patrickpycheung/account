@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.somecompany.account.model.Account;
 import com.somecompany.account.model.Customer;
+import com.somecompany.account.model.Transaction;
 import com.somecompany.account.service.AccountService;
 
 import io.swagger.annotations.ApiOperation;
@@ -46,5 +47,17 @@ public class AccountController {
 
 		log.info("Retrieved accounts for customer with custId " + custId);
 		return ResponseEntity.ok(accountService.getAllAccounts(customer));
+	}
+
+	@GetMapping(path = "/transaction", produces = "application/json")
+	@ApiOperation(value = "Get a list of transactions for the account")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Successfully retrieved transaction list", responseContainer = "List", response = Transaction.class) })
+	public ResponseEntity<List<Transaction>> getAllTransactions(
+			@RequestParam @NotEmpty(message = "Account number cannot be null nor empty") @Pattern(regexp = "^[0-9]+$", message = "Account number must be a number") @Min(value = 1L, message = "Account number must not be less than 1") @Max(value = 9999999999L, message = "Account number must not be larger than 9999999999") String accountNum) {
+		Account account = new Account();
+		account.setAccountNum(Long.valueOf(accountNum));
+
+		return ResponseEntity.ok(accountService.getAllTransactions(account));
 	}
 }
