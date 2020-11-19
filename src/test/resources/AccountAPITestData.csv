@@ -1,2 +1,2 @@
-﻿inputCustId,expectedAccountListStr
-1111111111,"[{custId=1111111111, accountNum=1111111111, accountName=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, accountType=Savings, balanceDate=2020-11-01T00:01:01.000+00:00, currency=SGD, openingAvailableBalance=99999.99}, {custId=1111111111, accountNum=3333333333, accountName=CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC, accountType=Current, balanceDate=2020-11-03T00:03:03.000+00:00, currency=USD, openingAvailableBalance=99999.99}]"
+﻿numOfAccountsStr,inputCustId,expectedAccountListStr
+2,1111111111,custId=1111111111~accountNum=1111111111~accountName=AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA~accountType=Savings~balanceDate=2020-11-01T11:01:01.000+00:00~currency=SGD~openingAvailableBalance=99999.99|custId=1111111111~accountNum=3333333333~accountName=CCCCCCCCCCCCCCCCCCCCCCCCCCCCCC~accountType=Current~balanceDate=2020-11-03T11:03:03.000+00:00~currency=USD~openingAvailableBalance=99999.99

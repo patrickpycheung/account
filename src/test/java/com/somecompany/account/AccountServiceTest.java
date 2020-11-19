@@ -4,8 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -111,13 +114,40 @@ public class AccountServiceTest {
 
 	@ParameterizedTest
 	@CsvFileSource(resources = "/AccountAPITestData.csv", numLinesToSkip = 1)
-	public void shouldBeAbleToGetAccountsByCustIdThroughAPICall(String inputCustId, String expectedAccountListStr) {
-		// The actual list of accounts
-		Object object = testRestTemplate.getForObject("http://localhost:" + port + "/api/account?custId=" + inputCustId,
-				Object.class);
+	public void shouldBeAbleToGetAccountsByCustIdThroughAPICall(String numOfAccountsStr, String inputCustId,
+			String expectedAccountListStr) {
 
-		// Assertion
-		assertEquals(expectedAccountListStr, object.toString());
+		// The actual list of accounts
+		ArrayList<LinkedHashMap<String, String>> actualAccountList = (ArrayList<LinkedHashMap<String, String>>) testRestTemplate
+				.getForObject("http://localhost:" + port + "/api/account?custId=" + inputCustId, Object.class);
+
+		// The expected list of accounts
+		String[] accounts = expectedAccountListStr.split("\\|");
+
+		// The number of accounts for the customer
+		int numOfAccounts = Integer.valueOf(numOfAccountsStr);
+
+		for (int i = 0; i < numOfAccounts; i++) {
+
+			String[] fields = accounts[i].split("~");
+
+			Map<String, String> expectedAccoutMap = new HashMap<>();
+
+			Stream.of(fields).forEach(field -> {
+				String[] keyAndVal = field.split("=");
+				expectedAccoutMap.put(keyAndVal[0], keyAndVal[1]);
+			});
+
+			assertEquals(expectedAccoutMap.get("custId"), String.valueOf(actualAccountList.get(i).get("custId")));
+			assertEquals(expectedAccoutMap.get("accountNum"),
+					String.valueOf(actualAccountList.get(i).get("accountNum")));
+			assertEquals(expectedAccoutMap.get("accountName"), actualAccountList.get(i).get("accountName"));
+			assertEquals(expectedAccoutMap.get("accountType"), actualAccountList.get(i).get("accountType"));
+			assertEquals(expectedAccoutMap.get("balanceDate"), actualAccountList.get(i).get("balanceDate"));
+			assertEquals(expectedAccoutMap.get("currency"), actualAccountList.get(i).get("currency"));
+			assertEquals(expectedAccoutMap.get("openingAvailableBalance"),
+					String.valueOf(actualAccountList.get(i).get("openingAvailableBalance")));
+		}
 	}
 
 	@Test
