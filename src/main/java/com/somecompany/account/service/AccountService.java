@@ -15,7 +15,10 @@ import com.somecompany.account.model.Customer;
 import com.somecompany.account.model.Transaction;
 import com.somecompany.account.model.TransactionPK;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class AccountService {
 
 	@Autowired
@@ -35,6 +38,10 @@ public class AccountService {
 
 		List<Account> acctList = accountRepository.findAll(example, Sort.by(Sort.Direction.ASC, "accountNum"));
 
+		log.info("##################################################\n"
+				+ "Retrieved account list for customer with customer ID " + customer.getCustId()
+				+ "\n##################################################");
+
 		return acctList;
 	}
 
@@ -51,6 +58,10 @@ public class AccountService {
 		Example<Transaction> example = Example.of(inputTransaction, matcher);
 
 		List<Transaction> transactionList = transactionRepository.findAll(example);
+
+		log.info("##################################################\n"
+				+ "Retrieved transaction list for account with account number " + account.getAccountNum()
+				+ "\n##################################################");
 
 		return transactionList;
 	}

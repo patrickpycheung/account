@@ -21,7 +21,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import lombok.extern.slf4j.Slf4j;
+
 @ControllerAdvice
+@Slf4j
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
@@ -31,6 +34,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
 		String error = "Required String parameter '" + exception.getParameterName() + "' is not present";
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(), error);
+		log.error("##################################################\n"
+				+ "Caught MissingServletRequestParameterException on API call, error info:\n" + apiError
+				+ "\n##################################################");
 		return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
 	}
 
@@ -44,6 +50,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 		}
 
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(), errors);
+		log.error("##################################################\n"
+				+ "Caught ConstraintViolationException on API call, error info:\n" + apiError
+				+ "\n##################################################");
 		return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
 	}
 
@@ -60,6 +69,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 		}
 
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+		log.error("##################################################\n"
+				+ "Caught MethodArgumentNotValidException on API call, error info:\n" + apiError
+				+ "\n##################################################");
 		return handleExceptionInternal(ex, apiError, headers, apiError.getStatus(), request);
 	}
 
@@ -68,6 +80,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 			WebRequest request) {
 		String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+		log.error("##################################################\n"
+				+ "Caught MethodArgumentTypeMismatchException on API call, error info:\n" + apiError
+				+ "\n##################################################");
 		return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
 	}
 }

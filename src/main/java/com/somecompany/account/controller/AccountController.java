@@ -24,12 +24,10 @@ import com.somecompany.account.service.AccountService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/account")
 @Validated
-@Slf4j
 public class AccountController {
 
 	@Autowired
@@ -45,7 +43,6 @@ public class AccountController {
 		Customer customer = new Customer();
 		customer.setCustId(Long.valueOf(custId));
 
-		log.info("Retrieved accounts for customer with custId " + custId);
 		return ResponseEntity.ok(accountService.getAllAccounts(customer));
 	}
 
