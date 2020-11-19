@@ -79,7 +79,7 @@ public class AccountServiceTest {
 	public void shouldBeAbleToGetTransactionsByAccountNum(String numOfTransactionsStr, String inputAccNum,
 			String expectedTransactionLists) {
 		Account account = new Account();
-		account.setAccountNum(1111111111);
+		account.setAccountNum(Long.valueOf(inputAccNum));
 
 		// The actual transaction values
 		List<Transaction> transactionList = accountService.getAllTransactions(account);
