@@ -13,7 +13,7 @@ COPY src src
 COPY pom.xml .
 
 # Compile the jar file on the container
-RUN mvn -Duser.timezone=UTC -f pom.xml clean package
+RUN mvn -Duser.timezone=UTC clean package
 
 
 # <Package stage>
@@ -28,4 +28,4 @@ WORKDIR /opt/app
 COPY --from=build /opt/source/account/target/account-1.0.0.jar app.jar
 
 # Run application in container
-ENTRYPOINT ["java","-Dspring.profiles.active=dev","-jar","app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
