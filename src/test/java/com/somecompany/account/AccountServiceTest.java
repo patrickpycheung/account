@@ -130,21 +130,21 @@ public class AccountServiceTest {
 
 			String[] fields = accounts[i].split("~");
 
-			Map<String, String> expectedAccoutMap = new HashMap<>();
+			Map<String, String> expectedAccountMap = new HashMap<>();
 
 			Stream.of(fields).forEach(field -> {
 				String[] keyAndVal = field.split("=");
-				expectedAccoutMap.put(keyAndVal[0], keyAndVal[1]);
+				expectedAccountMap.put(keyAndVal[0], keyAndVal[1]);
 			});
 
-			assertEquals(expectedAccoutMap.get("custId"), String.valueOf(actualAccountList.get(i).get("custId")));
-			assertEquals(expectedAccoutMap.get("accountNum"),
+			assertEquals(expectedAccountMap.get("custId"), String.valueOf(actualAccountList.get(i).get("custId")));
+			assertEquals(expectedAccountMap.get("accountNum"),
 					String.valueOf(actualAccountList.get(i).get("accountNum")));
-			assertEquals(expectedAccoutMap.get("accountName"), actualAccountList.get(i).get("accountName"));
-			assertEquals(expectedAccoutMap.get("accountType"), actualAccountList.get(i).get("accountType"));
-			assertEquals(expectedAccoutMap.get("balanceDate"), actualAccountList.get(i).get("balanceDate"));
-			assertEquals(expectedAccoutMap.get("currency"), actualAccountList.get(i).get("currency"));
-			assertEquals(expectedAccoutMap.get("openingAvailableBalance"),
+			assertEquals(expectedAccountMap.get("accountName"), actualAccountList.get(i).get("accountName"));
+			assertEquals(expectedAccountMap.get("accountType"), actualAccountList.get(i).get("accountType"));
+			assertEquals(expectedAccountMap.get("balanceDate"), actualAccountList.get(i).get("balanceDate"));
+			assertEquals(expectedAccountMap.get("currency"), actualAccountList.get(i).get("currency"));
+			assertEquals(expectedAccountMap.get("openingAvailableBalance"),
 					String.valueOf(actualAccountList.get(i).get("openingAvailableBalance")));
 		}
 	}
