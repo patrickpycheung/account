@@ -46,8 +46,7 @@ public class AccountServiceTest {
 			String expectedAccountLists) {
 
 		Customer customer = new Customer();
-		customer.setCustId(1111111111);
-		customer.setCustName("ABCDEFGHIJKLMNOPQRSTUVWXYZABCD");
+		customer.setCustId(Long.valueOf(inputCustId));
 
 		// The actual account values
 		List<Account> accList = accountService.getAllAccounts(customer);
