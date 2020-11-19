@@ -194,7 +194,7 @@ public class AccountServiceTest {
 	@Test
 	public void shouldBeAbleToCatchExceptionInResponseIfRequestParameterIsNotNumericWhenGetAccountsByCustIdThroughAPICall() {
 
-		String nonNumericCharStr = "~`!@#$%^&*()-_+={[}]|\\:;\"'<,>.?/abcdefghijklmnopqrstuvwxyz";
+		String nonNumericCharStr = "~`!@#$%^&*()-_+={[}]|\\:;\"'<,>.?/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 		Stream.of(nonNumericCharStr.split("")).forEach(nonNumericChar -> {
 			Object object = testRestTemplate
