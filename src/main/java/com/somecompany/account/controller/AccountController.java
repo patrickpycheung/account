@@ -1,5 +1,7 @@
 package com.somecompany.account.controller;
 
+import java.util.List;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -36,7 +38,7 @@ public class AccountController {
 	@ApiOperation(value = "Get a list of accounts for the customer")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Successfully retrieved account list", responseContainer = "List", response = Account.class) })
-	public ResponseEntity<Object> getAllAccounts(
+	public ResponseEntity<List<Account>> getAllAccounts(
 			@RequestParam @NotNull(message = "Customer ID cannot be null") @NotEmpty(message = "Customer ID cannot be empty") @Pattern(regexp = "^[0-9]+$", message = "Customer ID must be a number") @Min(value = 1L, message = "Customer ID must not be less than 1") @Max(value = 9999999999L, message = "Customer ID must not be larger than 9999999999") String custId) {
 
 		Customer customer = new Customer();
