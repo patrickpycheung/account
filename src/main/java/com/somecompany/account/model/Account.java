@@ -16,6 +16,12 @@ import lombok.Data;
 
 @Entity
 @Data
+/**
+ * The model class for "Account" table.
+ * 
+ * @author patrick
+ *
+ */
 public class Account {
 
 	@Column(name = "cust_id")

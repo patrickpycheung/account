@@ -11,6 +11,12 @@ import lombok.Data;
 
 @Entity
 @Data
+/**
+ * The model class for "Transaction" table.
+ * 
+ * @author patrick
+ *
+ */
 public class Transaction {
 
 	@EmbeddedId

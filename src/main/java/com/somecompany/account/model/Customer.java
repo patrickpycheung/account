@@ -10,6 +10,12 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
+/**
+ * The model class for "Customer" table.
+ * 
+ * @author patrick
+ *
+ */
 public class Customer {
 
 	@Column(name = "cust_id")

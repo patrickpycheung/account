@@ -28,6 +28,12 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 @RequestMapping("/api/account")
 @Validated
+/**
+ * Endpoints for API calls.
+ * 
+ * @author patrick
+ *
+ */
 public class AccountController {
 
 	@Autowired
@@ -37,6 +43,12 @@ public class AccountController {
 	@ApiOperation(value = "Get a list of accounts for the customer")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Successfully retrieved account list", responseContainer = "List", response = Account.class) })
+	/**
+	 * Endpoint for getting a list of accounts for the customer.
+	 * 
+	 * @param custId
+	 * @return ResponseEntity<List<Account>>
+	 */
 	public ResponseEntity<List<Account>> getAllAccounts(
 			@RequestParam @NotNull(message = "Customer ID cannot be null") @NotEmpty(message = "Customer ID cannot be empty") @Pattern(regexp = "^[0-9]+$", message = "Customer ID must be a number") @Min(value = 1L, message = "Customer ID must not be less than 1") @Max(value = 9999999999L, message = "Customer ID must not be larger than 9999999999") String custId) {
 
@@ -50,6 +62,12 @@ public class AccountController {
 	@ApiOperation(value = "Get a list of transactions for the account")
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Successfully retrieved transaction list", responseContainer = "List", response = Transaction.class) })
+	/**
+	 * Endpoint for getting a list of transactions for the account.
+	 * 
+	 * @param accountNum
+	 * @return ResponseEntity<List<Transaction>>
+	 */
 	public ResponseEntity<List<Transaction>> getAllTransactions(
 			@RequestParam @NotEmpty(message = "Account number cannot be null nor empty") @Pattern(regexp = "^[0-9]+$", message = "Account number must be a number") @Min(value = 1L, message = "Account number must not be less than 1") @Max(value = 9999999999L, message = "Account number must not be larger than 9999999999") String accountNum) {
 		Account account = new Account();

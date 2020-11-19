@@ -14,6 +14,12 @@ import lombok.Data;
 
 @Embeddable
 @Data
+/**
+ * The model class for the EmbeddedId (i.e. primary key) of the "Transaction" table.
+ * 
+ * @author patrick
+ *
+ */
 public class TransactionPK implements Serializable {
 
 	/**

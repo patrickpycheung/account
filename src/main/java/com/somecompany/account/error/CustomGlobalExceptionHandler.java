@@ -25,6 +25,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
+/**
+ * The custom exception handler to handle exceptions thrown when there is error with the request
+ * 
+ * @author patrick
+ *
+ */
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override

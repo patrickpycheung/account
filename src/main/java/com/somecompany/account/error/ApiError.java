@@ -8,6 +8,12 @@ import org.springframework.http.HttpStatus;
 import lombok.Data;
 
 @Data
+/**
+ * The custom error to be thrown when there is error with the request.
+ * 
+ * @author patrick
+ *
+ */
 public class ApiError {
 
 	private HttpStatus status;

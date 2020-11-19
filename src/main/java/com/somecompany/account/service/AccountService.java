@@ -19,6 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+/**
+ * The logic unit which carries out the request operation.
+ * 
+ * @author patrick
+ *
+ */
 public class AccountService {
 
 	@Autowired
@@ -27,6 +33,12 @@ public class AccountService {
 	@Autowired
 	private TransactionRepository transactionRepository;
 
+	/**
+	 * Get a list of accounts for the customer.
+	 * 
+	 * @param customer
+	 * @return List<Account>
+	 */
 	public List<Account> getAllAccounts(Customer customer) {
 
 		Account inputAccount = new Account();
@@ -45,6 +57,12 @@ public class AccountService {
 		return acctList;
 	}
 
+	/**
+	 * Get a list of transactions for the account.
+	 * 
+	 * @param account
+	 * @return List<Transaction>
+	 */
 	public List<Transaction> getAllTransactions(Account account) {
 
 		TransactionPK inputTransactionPK = new TransactionPK();

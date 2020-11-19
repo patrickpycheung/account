@@ -9,6 +9,12 @@ import com.somecompany.account.model.Transaction;
 
 @Repository
 @Transactional
+/**
+ * Data access object (DAO) for interacting with the "Transaction" table.
+ * 
+ * @author patrick
+ *
+ */
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
 }
