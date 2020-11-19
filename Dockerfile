@@ -13,7 +13,7 @@ COPY src src
 COPY pom.xml .
 
 # Compile the jar file on the container
-RUN mvn -f pom.xml clean package
+RUN mvn -Duser.timezone=UTC -f pom.xml clean package
 
 
 # <Package stage>
