@@ -8,6 +8,7 @@ import javax.persistence.Embeddable;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 import lombok.Data;
 
@@ -22,6 +23,7 @@ public class TransactionPK implements Serializable {
 
 	@Column(name = "account_num")
 	@NotEmpty(message = "Account number cannot be null nor empty")
+	@Pattern(regexp = "^[0-9]+$", message = "Account number must be a number")
 	@Min(value = 1L, message = "Account number  must not be less than 1")
 	@Max(value = 9999999999L, message = "Account number must not be larger than 9999999999")
 	private long accountNum;
