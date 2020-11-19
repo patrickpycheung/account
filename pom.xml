@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.somecompany</groupId>
 	<artifactId>account</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>account</name>
 	<description>View account list and account transactions</description>
 
