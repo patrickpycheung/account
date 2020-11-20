@@ -41,8 +41,8 @@
 The following assumptions are being made for the application:
 * There is a front-end application (outside of scope) handling the view layer which consumes the APIs.
 * Customer would perform a login operation (outside of scope) and would be able to provide a customer ID for account list enquiry.
-* There are constraints on the customer ID, account number and other fields
-* The application connects to a H2 in-memory relation database
+* There are constraints on the customer ID, account number and other fields.
+* The application connects to a H2 in-memory relation database.
 
 ## **Instructions**
 
@@ -177,7 +177,7 @@ Note: In production settings, the "spring.jpa.hibernate.ddl-auto" should be set 
 ### Controller layer
 
 The endpoints are hosted by the controller AccountController. It listens for API calls.
-When one is receivd, it triggers the corresponding method to handle the request.
+When one is received, it triggers the corresponding method to handle the request.
 
 It will then perform field validation (for GET request on request params and URL params) and bean validation (for PUT/POST request on request body which will be translated a a java object).
 
@@ -213,7 +213,7 @@ These can be configured in the logback-spring.xml.
 To change the log level (e.g. in order to see the Hibernate SQL statements):
 
 * Change the property "logging.level.root" to "debug" in application.yml
-* Amend the springProfile property (for the default profile, i.e. !dev) in logback-spring.xml such that it will write logs at debug level
+* Amend the "springProfile" property (for the default profile, i.e. !dev) in logback-spring.xml such that it will write logs at debug level
 
 ## **Technology stack**
 
