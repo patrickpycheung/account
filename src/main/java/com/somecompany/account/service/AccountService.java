@@ -50,7 +50,7 @@ public class AccountService {
 
 		List<Account> acctList = accountRepository.findAll(example, Sort.by(Sort.Direction.ASC, "accountNum"));
 
-		log.info("##################################################\n"
+		log.info("\n##################################################\n"
 				+ "Retrieved account list for customer with customer ID " + customer.getCustId()
 				+ "\n##################################################");
 
@@ -77,7 +77,7 @@ public class AccountService {
 
 		List<Transaction> transactionList = transactionRepository.findAll(example);
 
-		log.info("##################################################\n"
+		log.info("\n##################################################\n"
 				+ "Retrieved transaction list for account with account number " + account.getAccountNum()
 				+ "\n##################################################");
 

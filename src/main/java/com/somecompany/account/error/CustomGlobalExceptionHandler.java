@@ -40,7 +40,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 
 		String error = "Required String parameter '" + exception.getParameterName() + "' is not present";
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(), error);
-		log.error("##################################################\n"
+		log.error("\n##################################################\n"
 				+ "Caught MissingServletRequestParameterException on API call, error info:\n" + apiError
 				+ "\n##################################################");
 		return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
@@ -56,7 +56,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 		}
 
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(), errors);
-		log.error("##################################################\n"
+		log.error("\n##################################################\n"
 				+ "Caught ConstraintViolationException on API call, error info:\n" + apiError
 				+ "\n##################################################");
 		return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
@@ -75,7 +75,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 		}
 
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-		log.error("##################################################\n"
+		log.error("\n##################################################\n"
 				+ "Caught MethodArgumentNotValidException on API call, error info:\n" + apiError
 				+ "\n##################################################");
 		return handleExceptionInternal(ex, apiError, headers, apiError.getStatus(), request);
@@ -86,7 +86,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
 			WebRequest request) {
 		String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
-		log.error("##################################################\n"
+		log.error("\n##################################################\n"
 				+ "Caught MethodArgumentTypeMismatchException on API call, error info:\n" + apiError
 				+ "\n##################################################");
 		return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
