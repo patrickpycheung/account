@@ -9,8 +9,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
@@ -37,6 +39,11 @@ public class AccountTest {
 
 	@Autowired
 	private TestRestTemplate testRestTemplate;
+
+	@BeforeAll
+	public static void setup() {
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+	}
 
 	@ParameterizedTest
 	@CsvFileSource(resources = "/AccountTestData.csv", numLinesToSkip = 1)
