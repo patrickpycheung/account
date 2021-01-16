@@ -66,7 +66,10 @@ public class TransactionTest {
 			String[] transaction = transactions[i].split("~");
 
 			TransactionPK expectedTransactionPK = new TransactionPK();
-			expectedTransactionPK.setAccountNum(Long.valueOf(transaction[0]));
+			Account expectedTransactionAccount = new Account();
+			expectedTransactionAccount.setAccountNum(Long.valueOf(transaction[0]));
+			expectedTransactionPK.setAccount(expectedTransactionAccount);
+
 			expectedTransactionPK.setValueDate(Timestamp.valueOf(transaction[2]));
 
 			Transaction expectedTransaction = new Transaction();

@@ -66,12 +66,13 @@ public class AccountService {
 	public List<Transaction> getAllTransactions(Account account) {
 
 		TransactionPK inputTransactionPK = new TransactionPK();
-		inputTransactionPK.setAccountNum(account.getAccountNum());
+		inputTransactionPK.setAccount(account);
 
 		Transaction inputTransaction = new Transaction();
 		inputTransaction.setTransactionPK(inputTransactionPK);
 
-		ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnorePaths("debitAmt", "creditAmt");
+		ExampleMatcher matcher = ExampleMatcher.matchingAll().withIgnorePaths("debitAmt", "creditAmt",
+				"transactionPK.account.custId", "transactionPK.account.openingAvailableBalance");
 
 		Example<Transaction> example = Example.of(inputTransaction, matcher);
 

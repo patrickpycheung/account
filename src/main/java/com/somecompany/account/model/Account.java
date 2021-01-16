@@ -1,10 +1,15 @@
 package com.somecompany.account.model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -12,10 +17,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 /**
  * The model class for "Account" table.
  * 
@@ -23,6 +32,10 @@ import lombok.Data;
  *
  */
 public class Account {
+
+	@OneToMany(mappedBy = "transactionPK.account")
+	@JsonBackReference
+	private List<Transaction> transactions = new ArrayList<>();
 
 	@Column(name = "cust_id")
 	@NotEmpty(message = "Customer ID cannot be null nor empty")
@@ -33,6 +46,7 @@ public class Account {
 
 	@Column(name = "account_num")
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@NotEmpty(message = "Account number cannot be null nor empty")
 	@Pattern(regexp = "^[0-9]+$", message = "Account number must be a number")
 	@Min(value = 1L, message = "Account number  must not be less than 1")
