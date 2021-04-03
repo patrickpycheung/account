@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.somecompany</groupId>
-	<artifactId>igreendata-account</artifactId>
+	<artifactId>account</artifactId>
 	<version>1.0.0</version>
-	<name>iGreenData account application</name>
+	<name>Account application</name>
 	<description>View account list and account transactions</description>
 
 	<properties>
